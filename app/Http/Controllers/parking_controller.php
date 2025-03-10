@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\parking;
 use App\Models\user;
+use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Validation\ValidationException;
 
 class parking_controller extends Controller
@@ -26,7 +27,40 @@ class parking_controller extends Controller
             return response()->json([
                 'error' => $e->getMessage(),
                 'details' => $e->errors()
-            ], 422);
+            ], 400);
+        }
+    }
+    public function updateParking(Request $req, $id)
+    {
+        try {
+            $validatedData = $req->validate([
+                'name' => 'sometimes|string|min:3|max:255',
+                'totale_spost' => 'sometimes|numeric|gt:0',
+            ]);
+            $parkingSpot = parking::find($id);
+            if (!$parkingSpot) {
+                return response()->json(["messag" => "parking not found"], 404);
+            }
+
+            if ($req->has('name')) {
+                $parkingSpot->name = $req->name;
+            }
+            if ($req->has('totale_spost')) {
+                $parkingSpot->totale_spost = $req->totale_spost;
+                // Ensure available spots do not exceed total spots
+                if ($req->totale_spost - $parkingSpot->available_spots < 0) {
+                    return response()->json(["messag" => "you have reservation more than the reservation wate for the reservatino to end chance it "], 400);
+                }
+                $parkingSpot->available_spots = $req->totale_spost;
+            }
+            $parkingSpot->save();
+            return response()->json(["messag" => "parking have been updated succefuly "], Response::HTTP_OK);
+            
+        } catch (ValidationException $e) {
+            return response()->json([
+                'error' => $e->getMessage(),
+                'details' => $e->errors()
+            ], 400);
         }
     }
 }

@@ -10,5 +10,8 @@ Route::middleware("unAuth")->group(function () {
     Route::post('/singin', [auth::class, "login"]);
 });
 Route::middleware(["auth:sanctum","admin"])->group(function(){
-    Route::post('/creat/parking', [parking_controller::class, "addPrking"]);
+    Route::post('parking/creat', [parking_controller::class, "addPrking"]);
+    Route::patch('parking/update/{id}', [parking_controller::class, "updateParking"]);
+    // Route::delete('parking/delete/{id}', [parking_controller::class, "updateParking"]);
+
 });
