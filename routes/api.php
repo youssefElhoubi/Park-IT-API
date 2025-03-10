@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\auth;
 use App\Http\Controllers\parking_controller;
+use App\Http\Controllers\Reservaton_controller;
 
 Route::middleware("unAuth")->group(function () {
     Route::post('/singup', [auth::class, "signUp"]);
@@ -12,6 +13,8 @@ Route::middleware("unAuth")->group(function () {
 Route::middleware(["auth:sanctum","admin"])->group(function(){
     Route::post('parking/creat', [parking_controller::class, "addPrking"]);
     Route::patch('parking/update/{id}', [parking_controller::class, "updateParking"]);
-    // Route::delete('parking/delete/{id}', [parking_controller::class, "updateParking"]);
-
+    Route::delete('parking/delete/{id}', [parking_controller::class, "updateParking"]);
+});
+Route::middleware(["auth:sanctum","user"])->group(function(){
+    Route::post("parking/reserve",[Reservaton_controller::class,"Reserve"]);
 });

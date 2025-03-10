@@ -82,4 +82,5 @@ class parking_controller extends Controller
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
+    
 }
