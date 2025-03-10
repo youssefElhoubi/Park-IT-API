@@ -55,12 +55,31 @@ class parking_controller extends Controller
             }
             $parkingSpot->save();
             return response()->json(["messag" => "parking have been updated succefuly "], Response::HTTP_OK);
-            
+
         } catch (ValidationException $e) {
             return response()->json([
                 'error' => $e->getMessage(),
                 'details' => $e->errors()
             ], 400);
+        }
+    }
+    public function deleteParking($id)
+    {
+        try {
+            $parkingSpot = Parking::find($id);
+
+            if (!$parkingSpot) {
+                return response()->json(["message" => "Parking not found"], Response::HTTP_NOT_FOUND);
+            }
+
+            $parkingSpot->delete();
+
+            return response()->json(["message" => "Parking deleted successfully"], Response::HTTP_OK);
+        } catch (\Exception $e) {
+            return response()->json([
+                "error" => "Something went wrong",
+                "details" => $e->getMessage()
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 }
