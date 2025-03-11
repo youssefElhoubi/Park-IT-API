@@ -129,4 +129,8 @@ class Reservaton_controller extends Controller
             return response()->json(['error' => $th->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
+    public function myReservation(Request $req){
+        $user = auth()->user();
+        
+    }
 }

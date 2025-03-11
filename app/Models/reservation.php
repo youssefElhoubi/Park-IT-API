@@ -14,7 +14,12 @@ class reservation extends Model
         "start_time",
         "end_time",
     ];
-    public function Parcking(){
-        return $this->belongsTo(Parking::class,'parking_id');
+    public function Parcking()
+    {
+        return $this->belongsTo(Parking::class, 'parking_id');
+    }
+    public function Users()
+    {
+        return $this->belongsTo(User::class, 'user_id');
     }
 }
