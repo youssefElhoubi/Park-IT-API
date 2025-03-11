@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\parking;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Response;
@@ -38,6 +39,9 @@ class Reservaton_controller extends Controller
                 "start_time" => $startDate,
                 "end_time" => $endDate
             ]);
+            parking::find($id)->update([
+                "available_spots" => parking::find($id)->available_spots - 1
+            ]);
             if ($reservation) {
                 return response()->json(['message' => 'reservation created successfully', "reservation" => $reservation], Response::HTTP_CREATED);
             }
@@ -45,5 +49,25 @@ class Reservaton_controller extends Controller
             return response()->json(['error' => $e->errors()], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
-   
+    public function cancelReservation(Request $req, $id)
+    {
+        try {
+            $userId = auth()->user()->id;
+            $reservation = reservation::find($id);
+            if (!$reservation) {
+                return response()->json(['message' => 'reservation not found'], Response::HTTP_NOT_FOUND);
+            }
+            if ($reservation->user_id != $userId) {
+                return response()->json(['message' => 'you dont have permission to cancel this reservation'], Response::HTTP_FORBIDDEN);
+            }
+            $parkingId= $reservation->parking_id;
+            parking::find($parkingId)->update([
+                "available_spots" => parking::find($id)->available_spots + 1
+            ]);
+            $reservation->delete();
+            return response()->json(['message' => 'reservation cancelled successfully'], Response::HTTP_OK);
+        } catch (\Throwable $th) {
+            return response()->json(['error' => $th->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
 }
