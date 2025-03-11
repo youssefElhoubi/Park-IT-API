@@ -14,11 +14,12 @@ Route::middleware(["auth:sanctum","admin"])->group(function(){
     Route::post('parking/creat', [parking_controller::class, "addPrking"]);
     Route::patch('parking/update/{id}', [parking_controller::class, "updateParking"]);
     Route::delete('parking/delete/{id}', [parking_controller::class, "updateParking"]);
+    Route::get('parking/statistics', [parking_controller::class, "parkingStatistics"]);
 });
 Route::middleware(["auth:sanctum","user"])->group(function(){
     Route::post("reservation/reserve/{id}",[Reservaton_controller::class,"Reserve"]);
     Route::get("parking/search/{search}",[parking_controller::class, "search"]);
     Route::post("reservation/cancel/{id}",[Reservaton_controller::class,"cancelReservation"]);
     Route::patch("reservation/update/{id}",[Reservaton_controller::class,"editReservation"]);
-    Route::patch("reservation/myresrvation",[Reservaton_controller::class,"myReservations"]);
+    Route::get("reservation/myresrvation",[Reservaton_controller::class,"myReservations"]);
 });

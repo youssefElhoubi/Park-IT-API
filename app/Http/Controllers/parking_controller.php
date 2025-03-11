@@ -114,4 +114,25 @@ class parking_controller extends Controller
             return response()->json(['error' => $e->errors()], Response::HTTP_BAD_REQUEST);
         }
     }
+    public function parkingStatistics()
+    {
+        try {
+            $totalParkingLots = Parking::count(); // Total parking lots
+            $totalAvailableSpots = Parking::sum('available_spots'); // Total available spots
+            $totalSpots = Parking::sum('totale_spost'); // Total capacity across all parkings
+            $totalReservations = Reservation::count(); // Total reservations
+            $totalOccupiedSpots = $totalSpots - $totalAvailableSpots; // Occupied spots
+
+            return response()->json([
+                'totalParkingLots' => $totalParkingLots,
+                'totalAvailableSpots' => $totalAvailableSpots,
+                'totalOccupiedSpots' => $totalOccupiedSpots,
+                'totalReservations' => $totalReservations,
+            ], Response::HTTP_OK);
+
+        } catch (\Throwable $th) {
+            return response()->json(['error' => $th->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
 }
