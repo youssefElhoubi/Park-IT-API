@@ -35,8 +35,8 @@ class Reservaton_controller extends Controller
             $reservation = reservation::create([
                 "user_id" => $UserId,
                 "parking_id" => $id,
-                "startDate" => $startDate,
-                "endDate" => $endDate
+                "start_time" => $startDate,
+                "end_time" => $endDate
             ]);
             if ($reservation) {
                 return response()->json(['message' => 'reservation created successfully', "reservation" => $reservation], Response::HTTP_CREATED);

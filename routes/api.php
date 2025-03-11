@@ -16,5 +16,6 @@ Route::middleware(["auth:sanctum","admin"])->group(function(){
     Route::delete('parking/delete/{id}', [parking_controller::class, "updateParking"]);
 });
 Route::middleware(["auth:sanctum","user"])->group(function(){
-    Route::post("parking/reserve",[Reservaton_controller::class,"Reserve"]);
+    Route::post("reservation/reserve/{id}",[Reservaton_controller::class,"Reserve"]);
+    Route::post("parking/search/{search}",[parking_controller::class, "search"]);
 });

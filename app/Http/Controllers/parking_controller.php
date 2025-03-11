@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\reservation;
 use Illuminate\Http\Request;
 use App\Models\parking;
 use App\Models\user;
@@ -82,5 +83,35 @@ class parking_controller extends Controller
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
-    
+    public function search(Request $req)
+    {
+        try {
+            $query = Parking::query();
+
+            if ($req->has("name")) {
+                $search = $req->input('name');
+                $query->where("name", "like", "%$search%");
+            }
+
+            if ($req->has("time")) {
+                $search = $req->input('time');
+                $query->whereDoesntHave('Resrvations', function ($q) use ($search) {
+                    $q->where('start_time', '<=', $search)
+                        ->where('end_time', '>=', $search);
+                });
+            }
+
+            if ($req->has("total")) {
+                $search = $req->input('total');
+                $query->where('total_spots', '>=', $search);
+            }
+
+            $parkingInfo = $query->get();
+
+            return response()->json(["parking" => $parkingInfo], Response::HTTP_OK);
+
+        } catch (ValidationException $e) {
+            return response()->json(['error' => $e->errors()], Response::HTTP_BAD_REQUEST);
+        }
+    }
 }
