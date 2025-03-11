@@ -20,4 +20,5 @@ Route::middleware(["auth:sanctum","user"])->group(function(){
     Route::get("parking/search/{search}",[parking_controller::class, "search"]);
     Route::post("reservation/cancel/{id}",[Reservaton_controller::class,"cancelReservation"]);
     Route::patch("reservation/update/{id}",[Reservaton_controller::class,"editReservation"]);
+    Route::patch("reservation/myresrvation",[Reservaton_controller::class,"myReservations"]);
 });

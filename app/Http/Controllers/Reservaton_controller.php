@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Response;
 use App\Models\reservation;
+use LDAP\Result;
 
 class Reservaton_controller extends Controller
 {
@@ -129,8 +130,20 @@ class Reservaton_controller extends Controller
             return response()->json(['error' => $th->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
-    public function myReservation(Request $req){
-        $user = auth()->user();
-        
+    public function myReservations(Request $req)
+    {
+        try {
+            $user = auth()->user();
+            $myReservations = $user->reservations()->get(); // Ensure it's 'reservations', not 'Reservation'
+
+            if ($myReservations->isEmpty()) {
+                return response()->json(['message' => 'No reservations found', 'myReservations' => []], Response::HTTP_OK);
+            }
+
+            return response()->json(['myReservations' => $myReservations], Response::HTTP_OK);
+
+        } catch (\Throwable $th) {
+            return response()->json(['error' => $th->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 }
