@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Hash;
+use Symfony\Component\HttpFoundation\Response;
 
 class auth extends Controller
 {
@@ -27,12 +28,12 @@ class auth extends Controller
                 'password' => Hash::make($req->password),
             ]);
             $token = $user->createToken(env("INCREPTION_TOKEN"))->plainTextToken;
-            return response(["token" => $token]);
+            return response()->json(["token" => $token],Response::HTTP_OK);
         } catch (ValidationException $e) {
             return response()->json([
                 'message' => $e->getMessage(),
                 "details" => $e->errors()
-            ], 400);
+            ], Response::HTTP_BAD_REQUEST);
         }
     }
     public function login(Request $req)

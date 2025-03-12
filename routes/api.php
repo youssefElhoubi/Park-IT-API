@@ -7,7 +7,7 @@ use App\Http\Controllers\parking_controller;
 use App\Http\Controllers\Reservaton_controller;
 
 Route::middleware("unAuth")->group(function () {
-    Route::post('/singup', [auth::class, "signUp"]);
+    Route::post('/signup', [auth::class, "signUp"]);
     Route::post('/singin', [auth::class, "login"]);
 });
 Route::middleware(["auth:sanctum","admin"])->group(function(){
