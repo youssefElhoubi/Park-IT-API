@@ -87,4 +87,47 @@ class AuthTest extends TestCase
             ]
         ]);
     }
+    // log in tests 
+    public function test_User_log_inSucssecc_fully()
+    {
+        $user = User::factory()->create([
+            "name" => "jamal",
+            "email" => "jamal@gmail.com",
+            "password" => bcrypt("12341234")
+        ]);
+        $Reponse = $this->postJson("api/signin", [
+            "email" => "jamal@gmail.com",
+            "password" => "12341234"
+        ]);
+        $Reponse->assertStatus(Response::HTTP_OK)->assertJsonStructure([
+            "token"
+        ]);
+    }
+    public function test_User_does_not_exist()
+    {
+
+        $Reponse = $this->postJson("api/signin", [
+            "email" => "jamal@gmail.com",
+            "password" => "12341234"
+        ]);
+        $Reponse->assertStatus(Response::HTTP_BAD_REQUEST)->assertJsonStructure([
+            "message"
+        ]);
+    }
+    public function test_User_if_user_password_is_not_correct()
+    {
+        $user = User::factory()->create([
+            "name" => "jamal",
+            "email" => "jamal@gmail.com",
+            "password" => bcrypt("12341234")
+        ]);
+        $Reponse = $this->postJson("api/signin", [
+            "email" => "jamal@gmail.com",
+            "password" => "12341235"
+        ]);
+        $Reponse->assertStatus(Response::HTTP_BAD_REQUEST)->assertJsonStructure([
+            "message"
+        ]);
+    }
+
 }

@@ -8,7 +8,7 @@ use App\Http\Controllers\Reservaton_controller;
 
 Route::middleware("unAuth")->group(function () {
     Route::post('/signup', [auth::class, "signUp"]);
-    Route::post('/singin', [auth::class, "login"]);
+    Route::post('/signin', [auth::class, "login"]);
 });
 Route::middleware(["auth:sanctum","admin"])->group(function(){
     Route::post('parking/creat', [parking_controller::class, "addPrking"]);
