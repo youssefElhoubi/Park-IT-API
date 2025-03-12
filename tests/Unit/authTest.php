@@ -129,5 +129,10 @@ class AuthTest extends TestCase
             "message"
         ]);
     }
+    public function test_if_any_feald_is_missing_login()
+    {
+        $responce = $this->postJson("api/signin", []);
+        $responce->assertStatus(Response::HTTP_BAD_REQUEST)->assertJsonStructure(["message","details"]);
+    }
 
 }
