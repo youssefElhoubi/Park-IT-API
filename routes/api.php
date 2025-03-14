@@ -11,7 +11,7 @@ Route::middleware("unAuth")->group(function () {
     Route::post('/signin', [auth::class, "login"]);
 });
 Route::middleware(["auth:sanctum","admin"])->group(function(){
-    Route::post('parking/creat', [parking_controller::class, "addPrking"]);
+    Route::post('parking/create', [parking_controller::class, "addPrking"]);
     Route::patch('parking/update/{id}', [parking_controller::class, "updateParking"]);
     Route::delete('parking/delete/{id}', [parking_controller::class, "updateParking"]);
     Route::get('parking/statistics', [parking_controller::class, "parkingStatistics"]);

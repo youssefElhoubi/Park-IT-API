@@ -32,7 +32,8 @@ class AuthTest extends TestCase
         User::factory()->create([
             "name" => "jamal",
             "email" => "jamal@gmail.com",
-            "password" => bcrypt("12341234")
+            "password" => bcrypt("12341234"),
+            "role"=>"admine"
         ]);
         $responce = $this->postJson("api/signup", [
             "name" => "jamal",
@@ -93,7 +94,8 @@ class AuthTest extends TestCase
         $user = User::factory()->create([
             "name" => "jamal",
             "email" => "jamal@gmail.com",
-            "password" => bcrypt("12341234")
+            "password" => bcrypt("12341234"),
+            "role"=>"admine"
         ]);
         $Reponse = $this->postJson("api/signin", [
             "email" => "jamal@gmail.com",
@@ -119,7 +121,8 @@ class AuthTest extends TestCase
         $user = User::factory()->create([
             "name" => "jamal",
             "email" => "jamal@gmail.com",
-            "password" => bcrypt("12341234")
+            "password" => bcrypt("12341234"),
+            "role"=>"admine"
         ]);
         $Reponse = $this->postJson("api/signin", [
             "email" => "jamal@gmail.com",
